@@ -15,6 +15,7 @@ var (
 	flagBytes     = flag.Uint("b", 0, "bytes")
 	flagKiloBytes = flag.Uint("kb", 0, "kilo bytes")
 	flagMegaBytes = flag.Uint("mb", 0, "mega bytes")
+	flagHang      = flag.Bool("hang", false, "Sleep after output all")
 )
 
 func Cat(ticker <-chan time.Time, r io.Reader) error {
@@ -70,6 +71,9 @@ func mains(args []string) error {
 		if err2 != nil {
 			return err2
 		}
+	}
+	if *flagHang {
+		time.Sleep(time.Hour)
 	}
 	return nil
 }
