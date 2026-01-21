@@ -19,13 +19,19 @@ var (
 )
 
 func Cat(ticker <-chan time.Time, r io.Reader) error {
-	sc := bufio.NewScanner(r)
-	for sc.Scan() {
-		text := sc.Text()
-		fmt.Println(text)
+	br := bufio.NewReader(r)
+	for {
+		data, err := br.ReadString('r')
+		if err == io.EOF {
+			io.WriteString(os.Stdout, data)
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		io.WriteString(os.Stdout, data)
 		<-ticker
 	}
-	return sc.Err()
 }
 
 type binCat int64
